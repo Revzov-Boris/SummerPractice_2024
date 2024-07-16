@@ -161,22 +161,15 @@ public class JDBCRunner {
         // удаляем учеников 11-х классов
         Connection connection = DriverManager.getConnection(DATABASE_URL, USER_NAME, DATABASE_PASS);
         Statement statement = connection.createStatement();
-        try {
-            ResultSet resultSet = statement.executeQuery("SELECT id, title_class FROM pupils");
-            while (resultSet.next()) {
-                String title_class = resultSet.getString("title_class");
-                //System.out.println(title_class);
-                if (!title_class.substring(0, 2).equals("11")) {
-                    continue;
-                }
-                String id = resultSet.getString("id");
-                delPupils(id);
+        ResultSet resultSet = statement.executeQuery("SELECT id, title_class FROM pupils");
+        while (resultSet.next()) {
+            String title_class = resultSet.getString("title_class");
+            if (!title_class.substring(0, 2).equals("11")) {
+                continue;
             }
-        } catch (SQLException e)  {
-            System.out.println("Одинадцатиклассников не обнаружено");
+            String id = resultSet.getString("id");
+            delPupils(id);
         }
-
-
         statement.close();
         connection.close();
 
@@ -204,7 +197,7 @@ public class JDBCRunner {
         // переводим учеников в старший класс
         connection = DriverManager.getConnection(DATABASE_URL, USER_NAME, DATABASE_PASS);
         statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT id, title_class FROM pupils");
+        resultSet = statement.executeQuery("SELECT id, title_class FROM pupils");
         while (resultSet.next()) {
             String title_class = resultSet.getString("title_class");
             String id = resultSet.getString("id");
